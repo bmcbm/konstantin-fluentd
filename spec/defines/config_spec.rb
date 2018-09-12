@@ -24,6 +24,7 @@ RSpec.describe 'fluentd::config' do
 
       it do
         is_expected.to contain_file('/etc/td-agent/config.d/stdout.conf').
+          with(:ensure => 'present').
           with_content(/<match \*\*>/).
           with_content(/@type forward/).
           with_content(/<server>/).
@@ -32,6 +33,20 @@ RSpec.describe 'fluentd::config' do
           with_content(/<\/server>/).
           with_content(/host example2.com/).
           with_content(/<\/match>/)
+      end
+    end
+
+    context 'when config contains ensure absent' do
+      let(:params) do
+        {
+          ensure: 'absent',
+          config: { }
+        }
+      end
+
+      it do
+        is_expected.to contain_file('/etc/td-agent/config.d/stdout.conf').
+          with(:ensure => 'absent')
       end
     end
   end
